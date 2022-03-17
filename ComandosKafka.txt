@@ -1,0 +1,49 @@
+Comandos Kakfa
+
+primeiro entrar na pasta:kafka_2.12-3.1.0
+
+em seguida, conectar o zookeeper:.\bin\windows\zookeeper-server-start.bat config\zookeeper.properties
+depois, startar o kafka:.\bin\windows\kafka-server-start.bat config\server.properties
+
+obs:para que o kafka funcione corretamente é preciso abrir 2 cmds ao meu tempo.
+um para o zookeeper e outro para o kafka.
+
+criar um topico:.\bin\windows\kafka-topics.bat --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic test
+
+listar os topicos criados:kafka-topics.bat --bootstrap-server localhost:9092 --list
+fornece uma descrição detalhada:kafka-topics.bat --bootstrap-server localhost:9092 --nomedotopico --describe
+listar as funções no kafka:kafka-topics.bat
+
+obs: para deletar um topico do kafka , não podemos apaga-lo via cmd no windows porque gerará um delay muito grande.
+Logo, devemos faze-lo manualmente dentro da pasta DATA.
+
+obs:as informações acerca da criação do consumidor e do produtor só podem ser vistas na tela startada com o kafka.
+
+KAFKA CONSOLE PRODUCER CLI
+mostra as opções :kafka-console-producer.bat
+inicia um produtor:.\bin\windows\kafka-console-producer.bat --broker-list localhost:9092 --topic test
+kafka-console-producer.bat --broker-list localhost:9092 --topic first --producer-property acks=all
+
+KAFKA CONSOLE CONSUMER CLI
+mostra as opções:kafka-console-consumer.bat
+inicia um consumidor e mostra todas as mensagens desde o inicio ate a mais recente:.\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic test --from-beginning
+possibilita um dialogo em tempo real entre o producer que envia a mensagem e o consumer que a recebe:
+.\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic test
+possibilita nomear um grupo de consumers e starta-lo:
+kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic first --group my-fourth-application
+
+KAFKA CONSUMER GROUPS CLI
+ver toda documentação:kafka-consumer-groups
+obs: esse comando lista todos os consumers groups, os descreve, deleta-os ou reseta-os.
+listar: kafka-consumer-groups --bootstrap-server localhost:9092 --list
+
+descreve:kafka-consumer-groups --bootstrap-server localhost:9092 --group my-first-application --describe
+
+resetar:
+--to-earliest
+kafka-consumer-groups --bootstrap-server localhost:9092 --group my-first-application --reset-offsets --to-earliest --execute --topic first
+
+--shift-by 2
+kafka-consumer-groups --bootstrap-server localhost:9092 --group my-first-application --reset-offsets --shift-by 2 --execute --topic first
+
+kafka-consumer-groups --bootstrap-server localhost:9092 --group my-first-application --reset-offsets --shift-by -2 --execute --topic first
